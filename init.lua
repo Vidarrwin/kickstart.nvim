@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -156,6 +156,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Colorscheme
+vim.cmd [[colorscheme retrobox]]
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -188,6 +191,9 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Custom keymaps
+vim.keymap.set('i', 'kj', '<Esc>', { desc = 'Escape insert mode with kj' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -275,7 +281,7 @@ require('lazy').setup({
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
-      delay = 0,
+      delay = 200,
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -437,7 +443,6 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
-
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -592,14 +597,14 @@ require('lazy').setup({
       })
 
       -- Change diagnostic symbols in the sign column (gutter)
-      -- if vim.g.have_nerd_font then
-      --   local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
-      --   local diagnostic_signs = {}
-      --   for type, icon in pairs(signs) do
-      --     diagnostic_signs[vim.diagnostic.severity[type]] = icon
-      --   end
-      --   vim.diagnostic.config { signs = { text = diagnostic_signs } }
-      -- end
+      if vim.g.have_nerd_font then
+        local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
+        local diagnostic_signs = {}
+        for type, icon in pairs(signs) do
+          diagnostic_signs[vim.diagnostic.severity[type]] = icon
+        end
+        vim.diagnostic.config { signs = { text = diagnostic_signs } }
+      end
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
@@ -641,7 +646,7 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -687,7 +692,7 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>fm',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
@@ -840,23 +845,23 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -890,9 +895,9 @@ require('lazy').setup({
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
