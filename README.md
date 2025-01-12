@@ -1,4 +1,11 @@
-# kickstart.nvim
+# Personnal fork from kickstart.nvim
+
+## Preface
+
+This a a forked repo from [kickstart](https://github.com/nvim-lua/kickstart.nvim) for my Personal Development Environment.
+This is advised by the original repo, so here I go !
+Even though I'm not familiar with forking at all, but I will make me learn stuff :)
+I left the original `README.md` below!
 
 ## Introduction
 
